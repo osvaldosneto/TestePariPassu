@@ -1,0 +1,27 @@
+Seu nome: Osvaldo da Silva Neto
+Estudante Engenharia de Telecomunicações
+IFSC - Campus São José
+7 Fase
+
+1)Selecionando linha com a menor data de lançamento do filme
+  SELECT * 
+  FROM en_filme 
+  WHERE data_lancamento = ( SELECT MIN(data_lancamento) from en_filme)
+
+2)Contabilizando número de reservas
+  SELECT en_aluguel.id_cliente, en_cliente.nome, Count(en_aluguel.id_cliente) alugueis 
+  FROM en_aluguel 
+  INNER JOIN en_cliente 
+  On en_aluguel.id_cliente=en_cliente.id_cliente
+  GROUP BY en_aluguel.id_cliente, en_cliente.nome
+  ORDER BY alugueis ASC
+
+3)Filtro com extração de ano
+  SELECT en_aluguel.id_cliente, en_cliente.nome, en_aluguel.data_aluguel, 
+  Count(en_aluguel.id_cliente) alugueis, sum(en_aluguel.valor) total,
+  extract(year from en_aluguel.data_aluguel ) AS ano
+  FROM en_aluguel 
+  INNER JOIN en_cliente 
+  On en_aluguel.id_cliente=en_cliente.id_cliente
+  GROUP BY en_aluguel.id_cliente, en_cliente.nome, en_aluguel.data_aluguel
+  ORDER BY total DESC
